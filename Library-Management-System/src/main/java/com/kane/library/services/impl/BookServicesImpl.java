@@ -41,11 +41,6 @@ public class BookServicesImpl implements BookServices {
 		return ApplicationConstants.BOOK_MSG+savedBooks.getId();
 	}
 
-//	private BookResponse builBookResponse(Books savedBooks) {
-//		return BookResponse.builder().author(savedBooks.getAuthorName())
-//				.price(savedBooks.getPrice())
-//				.bookName(savedBooks.getBookName()).build();
-//	}
 
 	private Books buildBooks(BookRequest bookRequest) {
 		return Books.builder()
@@ -122,7 +117,6 @@ public class BookServicesImpl implements BookServices {
 		bookResponse.setAuthor(books.getAuthorName());
 		bookResponse.setBookName(books.getBookName());
 		bookResponse.setPrice(books.getPrice());
-		//bookResponse.setStatus(books.getStatus()!=null?books.getStatus():null);
 		if(books.getStatus()!=null) {
 			bookResponse.setStatus(books.getStatus());
 			
@@ -142,6 +136,12 @@ public class BookServicesImpl implements BookServices {
 				.totalRecords(pagebookes.getTotalElements())
 				.totalPages(pagebookes.getTotalPages())
 				.books(bookResponse).build();
+	}
+
+	@Override
+	public BookResponse getBookById(Integer id) {
+		Optional<Books> book = bookRepositories.findById(id);
+		return buildBookResponse(book.get());
 	}
 
 }

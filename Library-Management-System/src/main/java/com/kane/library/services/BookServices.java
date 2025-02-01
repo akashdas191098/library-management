@@ -16,4 +16,6 @@ public interface BookServices {
 	public BookReturnResponse returnedBook(BookIssueRequest returnRequest);
 	
 	public BookResponseWithHeader getBookResponse(String keyword, Integer pageNumber, Integer pageSize);
+	
+	public BookResponse getBookById(Integer id);
 }

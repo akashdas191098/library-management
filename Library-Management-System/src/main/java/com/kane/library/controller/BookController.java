@@ -2,6 +2,7 @@ package com.kane.library.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.kane.library.constants.ApplicationConstants;
 import com.kane.library.request.BookIssueRequest;
 import com.kane.library.request.BookRequest;
 import com.kane.library.response.BookIssueResponse;
+import com.kane.library.response.BookResponse;
 import com.kane.library.response.BookResponseWithHeader;
 import com.kane.library.response.BookReturnResponse;
 import com.kane.library.services.BookServices;
@@ -48,6 +50,11 @@ public class BookController {
 		
 		return bookServices.getBookResponse(keyword, pageNumber, pageSize);
 		
+	}
+	
+	@GetMapping("/get-book/{id}")
+	public BookResponse findBookById(@PathVariable("id") Integer id) {
+		return bookServices.getBookById(id);
 	}
 	
 
