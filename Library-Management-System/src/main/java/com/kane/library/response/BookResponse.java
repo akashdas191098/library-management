@@ -9,6 +9,6 @@ public class BookResponse {
 	private Integer price;
 	private String author;
 	private String status;
-	private UserResponse users;
+	private UserResponse user;
 
 }

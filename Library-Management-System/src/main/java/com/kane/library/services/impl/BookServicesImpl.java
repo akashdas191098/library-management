@@ -11,9 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kane.library.constants.ApplicationConstants;
+import com.kane.library.constants.ErrorConstants;
 import com.kane.library.entity.Books;
 import com.kane.library.entity.User;
+import com.kane.library.enums.BookState;
 import com.kane.library.enums.BookStatus;
+import com.kane.library.exceptionHandeling.APIException;
 import com.kane.library.repository.BookRepositories;
 import com.kane.library.repository.UserRepositories;
 import com.kane.library.request.BookIssueRequest;
@@ -47,46 +50,57 @@ public class BookServicesImpl implements BookServices {
 				.bookName(bookRequest.getBookName())
 				.price(bookRequest.getPrice())
 				.authorName(bookRequest.getAuthorName())
+				.status(BookStatus.AVAILABLE.toString())
 				.build();
 	}
 
 	@Override
 	public BookIssueResponse issueBook(BookIssueRequest issueRequest) {
-		// TODO Auto-generated method stub
-		Optional<Books> book = bookRepositories.findById(issueRequest.getBookId());
 		Optional<User> user = userRepositories.findById(issueRequest.getUserId());
+		if(user.isEmpty()) {
+			throw new APIException(ErrorConstants.USER_NOT_FOUND+issueRequest.getUserId());
+		}
+		Optional<Books> book = bookRepositories.bookByIdAndStatus(issueRequest.getBookId());
+		if(book.isEmpty()) {
+			throw new APIException(ErrorConstants.BOOK_NOT_FOUND);
+		}
 		Books updateBook = book.get();
-		updateBook.setStatus(BookStatus.ISSUED.toString());
+		updateBook.setStatus(BookStatus.NOTAVAILABLE.toString());
 		updateBook.setUsers(user.get());
 		bookRepositories.save(updateBook);
 		return bookIssueResponseBuilder(updateBook);
 	}
 
 	private BookIssueResponse bookIssueResponseBuilder(Books updateBook) {
-		// TODO Auto-generated method stub
 		return BookIssueResponse.builder()
 				.userId(updateBook.getUsers().getId())
 				.bookId(updateBook.getId())
-				.bookStatus(updateBook.getStatus()).build();
+				.bookStatus(BookState.ISSUED.toString()).build();
 		
 	}
 
 	@Override
-	public BookReturnResponse returnedBook(BookIssueRequest returnRequest) {
-		// TODO Auto-generated method stub
-		Optional<Books> getBook = bookRepositories.getBookGyUserAndId(returnRequest.getUserId(), returnRequest.getBookId());
+	public BookReturnResponse returnBook(BookIssueRequest returnRequest) {
+		Optional<User> user = userRepositories.findById(returnRequest.getUserId());
+		if(user.isEmpty()) {
+			throw new APIException(ErrorConstants.USER_NOT_FOUND + returnRequest.getUserId());
+		}
+		Optional<Books> getBook = bookRepositories.getBookGyUserAndId(user.get().getId(), returnRequest.getBookId());
+		if(getBook.isEmpty())
+		{
+			throw new APIException(ErrorConstants.WRONG_BOOK_RETURNING);
+		}
 		Books returnBook= getBook.get();
-		returnBook.setStatus(BookStatus.RETURNED.toString());
+		returnBook.setStatus(BookStatus.AVAILABLE.toString());
 		returnBook.setUsers(null);
 		Books updatedBook = bookRepositories.save(returnBook);
 		return bookReturnResponseBuilder(updatedBook);
 	}
 
 	private BookReturnResponse bookReturnResponseBuilder(Books updatedBook) {
-		// TODO Auto-generated method stub
 		return BookReturnResponse.builder()
 				.bookId(updatedBook.getId())
-				.bookStatus(updatedBook.getStatus())
+				.bookStatus(BookState.RETURNED.toString())
 				.build();
 	}
 
@@ -94,7 +108,7 @@ public class BookServicesImpl implements BookServices {
 	public BookResponseWithHeader getBookResponse(String keyword, Integer pageNumber, Integer pageSize) {
 		Pageable p = PageRequest.of(pageNumber, pageSize);
 		Page<Books> pageBooks = null;
-		if(keyword.equalsIgnoreCase("NULL")) {
+		if(keyword.equalsIgnoreCase(ApplicationConstants.DAFAULT_SEARCH_FORMAT)) {
 			
 			pageBooks = bookRepositories.findAll(p);
 		}
@@ -117,12 +131,9 @@ public class BookServicesImpl implements BookServices {
 		bookResponse.setAuthor(books.getAuthorName());
 		bookResponse.setBookName(books.getBookName());
 		bookResponse.setPrice(books.getPrice());
-		if(books.getStatus()!=null) {
-			bookResponse.setStatus(books.getStatus());
-			
-		}
+		bookResponse.setStatus(books.getStatus());
 		if(books.getUsers()!=null) {
-			bookResponse.setUsers(UserResponse.builder()
+			bookResponse.setUser(UserResponse.builder()
 					.Name(books.getUsers().getFirstName()+ApplicationConstants.SPACE_FORMAT+books.getUsers().getLastName())
 					.id(books.getUsers().getId()).build());
 		}
@@ -141,6 +152,9 @@ public class BookServicesImpl implements BookServices {
 	@Override
 	public BookResponse getBookById(Integer id) {
 		Optional<Books> book = bookRepositories.findById(id);
+		if(book.isEmpty()) {
+			throw new APIException(ErrorConstants.BOOK_NOT_FOUND);
+		}
 		return buildBookResponse(book.get());
 	}
 

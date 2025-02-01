@@ -3,6 +3,7 @@ package com.kane.library.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kane.library.constants.ApplicationConstants;
 import com.kane.library.entity.User;
 import com.kane.library.repository.UserRepositories;
 import com.kane.library.request.UserRequest;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserServices {
 	}
 	
 	private UserResponse buildUserResponse(User savedUser) {
-		return UserResponse.builder().id(savedUser.getId()).Name(savedUser.getFirstName()+savedUser.getLastName()).build();
+		return UserResponse.builder().id(savedUser.getId()).Name(savedUser.getFirstName()+ApplicationConstants.SPACE_FORMAT+savedUser.getLastName()).build();
 	}
 
 	private User buildUser(UserRequest request) {

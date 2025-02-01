@@ -40,7 +40,7 @@ public class BookController {
 	
 	@PutMapping("/return-book")
 	public BookReturnResponse returnBook(@RequestBody BookIssueRequest returnRequest) {
-		return bookServices.returnedBook(returnRequest);
+		return bookServices.returnBook(returnRequest);
 	}
 	
 	@GetMapping("/get-books")

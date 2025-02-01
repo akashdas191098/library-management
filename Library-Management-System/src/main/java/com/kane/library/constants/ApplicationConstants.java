@@ -15,4 +15,6 @@ public class ApplicationConstants {
     public static final String BOOK_MSG = "book created with id : ";
     
     public static final String SPACE_FORMAT = " ";
+    
+    public static final String DAFAULT_SEARCH_FORMAT = "NULL";
 }

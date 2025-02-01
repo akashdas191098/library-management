@@ -13,7 +13,7 @@ public interface BookServices {
 	
 	public BookIssueResponse issueBook(BookIssueRequest issueRequest);
 	
-	public BookReturnResponse returnedBook(BookIssueRequest returnRequest);
+	public BookReturnResponse returnBook(BookIssueRequest returnRequest);
 	
 	public BookResponseWithHeader getBookResponse(String keyword, Integer pageNumber, Integer pageSize);
 	

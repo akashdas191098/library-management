@@ -20,5 +20,8 @@ public interface BookRepositories extends JpaRepository<Books, Integer> {
 	
 	@Query(value = QueryConstants.SEARCH_BY_BOOK_NAME, nativeQuery = true)
 	Page<Books> searchByName(@Param(value="keyword")String keyword,Pageable p);
+	
+	@Query(value = QueryConstants.GET_BOOK_BY_ID_AND_STATUS, nativeQuery = true)
+	Optional<Books> bookByIdAndStatus(@Param(value="id")Integer id);
 
 }
