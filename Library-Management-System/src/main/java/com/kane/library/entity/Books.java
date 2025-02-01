@@ -1,12 +1,23 @@
 package com.kane.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Books")
 public class Books extends CommonEntityProperties {
 	
@@ -18,4 +29,12 @@ public class Books extends CommonEntityProperties {
 	
 	@Column(name = "Price")
 	private Integer price;
+	
+	@Column(name = "Book_Status")
+	private String status;
+	
+	@JsonIgnore
+    @ManyToOne(targetEntity = User.class, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User users;
 }
