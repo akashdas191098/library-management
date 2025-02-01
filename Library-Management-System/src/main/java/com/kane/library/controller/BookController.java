@@ -1,16 +1,20 @@
 package com.kane.library.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kane.library.constants.ApplicationConstants;
 import com.kane.library.request.BookIssueRequest;
 import com.kane.library.request.BookRequest;
 import com.kane.library.response.BookIssueResponse;
-import com.kane.library.response.BookResponse;
+import com.kane.library.response.BookResponseWithHeader;
 import com.kane.library.response.BookReturnResponse;
 import com.kane.library.services.BookServices;
 
@@ -22,7 +26,7 @@ public class BookController {
 	private BookServices bookServices;
 	
 	@PostMapping("/create-book")
-	public BookResponse createBooks(@RequestBody BookRequest bookRequest) {
+	public String createBooks(@RequestBody BookRequest bookRequest) {
 		
 		return bookServices.createBook(bookRequest);
 	}
@@ -35,6 +39,15 @@ public class BookController {
 	@PutMapping("/return-book")
 	public BookReturnResponse returnBook(@RequestBody BookIssueRequest returnRequest) {
 		return bookServices.returnedBook(returnRequest);
+	}
+	
+	@GetMapping("/get-books")
+	public BookResponseWithHeader getBookInfos(@RequestParam(value="keyword", defaultValue = "NULL", required = false) String keyword,
+			@RequestHeader(value = "pageNumber", defaultValue = ApplicationConstants.USER_SEARCH_DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestHeader(value = "pageSize", defaultValue = ApplicationConstants.USER_SEARCH_DEFAULT_PAGE_SIZE, required = false) Integer pageSize) {
+		
+		return bookServices.getBookResponse(keyword, pageNumber, pageSize);
+		
 	}
 	
 
