@@ -33,16 +33,25 @@ public class BookController {
 		return bookServices.createBook(bookRequest);
 	}
 	
+	/*
+	 * Question no 1 : issue a book
+	 */
 	@PutMapping("/issue-book")
 	public BookIssueResponse issueBook(@RequestBody BookIssueRequest issueRequest) {
 		return bookServices.issueBook(issueRequest);
 	}
 	
+	/*
+	 * Question no 2 : return the book
+	 */
 	@PutMapping("/return-book")
 	public BookReturnResponse returnBook(@RequestBody BookIssueRequest returnRequest) {
 		return bookServices.returnBook(returnRequest);
 	}
 	
+	/*
+	 * Question no 3 & 4 show list of books and search for a specific book with some specific tileformat
+	 */
 	@GetMapping("/get-books")
 	public BookResponseWithHeader getBookInfos(@RequestParam(value="keyword", defaultValue = "NULL", required = false) String keyword,
 			@RequestHeader(value = "pageNumber", defaultValue = ApplicationConstants.USER_SEARCH_DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
@@ -52,6 +61,10 @@ public class BookController {
 		
 	}
 	
+	
+	/*
+	 * Question no 4 - Search a book with mention bookId
+	 */
 	@GetMapping("/get-book/{id}")
 	public BookResponse findBookById(@PathVariable("id") Integer id) {
 		return bookServices.getBookById(id);
