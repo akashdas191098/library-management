@@ -12,7 +12,7 @@ public class ApplicationConstants {
     
     public static final String SEARCH_FORMAT = "%";
     
-    public static final String BOOK_MSG = "book created with id : ";
+    public static final String BOOK_MESSAGE = "book created with id : ";
     
     public static final String SPACE_FORMAT = " ";
     
