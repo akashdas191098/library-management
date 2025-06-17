@@ -1,6 +1,8 @@
 package com.kane.library.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,38 +28,46 @@ public class BookController {
 	
 	@Autowired
 	private BookServices bookServices;
-	
+
 	@PostMapping("/create-book")
-	public String createBooks(@RequestBody BookRequest bookRequest) {
-		
-		return bookServices.createBook(bookRequest);
+	public ResponseEntity<String> createBooks(@RequestBody BookRequest bookRequest) {
+
+		String message = bookServices.createBook(bookRequest);
+
+		return new ResponseEntity<String>(message, HttpStatus.CREATED);
 	}
 	
 	/*
 	 * Question no 1 : issue a book
 	 */
 	@PutMapping("/issue-book")
-	public BookIssueResponse issueBook(@RequestBody BookIssueRequest issueRequest) {
-		return bookServices.issueBook(issueRequest);
+	public ResponseEntity<BookIssueResponse> issueBook(@RequestBody BookIssueRequest issueRequest) {
+
+		BookIssueResponse bookIssueResponse = bookServices.issueBook(issueRequest);
+		return new ResponseEntity<BookIssueResponse>(bookIssueResponse,HttpStatus.CREATED);
 	}
 	
 	/*
 	 * Question no 2 : return the book
 	 */
 	@PutMapping("/return-book")
-	public BookReturnResponse returnBook(@RequestBody BookIssueRequest returnRequest) {
-		return bookServices.returnBook(returnRequest);
+	public ResponseEntity<BookReturnResponse> returnBook(@RequestBody BookIssueRequest returnRequest) {
+
+		BookReturnResponse bookReturnResponse = bookServices.returnBook(returnRequest);
+		return new ResponseEntity<BookReturnResponse>(bookReturnResponse,HttpStatus.OK);
 	}
 	
 	/*
 	 * Question no 3 & 4 show list of books and search for a specific book with some specific tileformat
 	 */
 	@GetMapping("/get-books")
-	public BookResponseWithHeader getBookInfos(@RequestParam(value="keyword", defaultValue = "NULL", required = false) String keyword,
+	public ResponseEntity<BookResponseWithHeader> getBookInfos(@RequestParam(value="keyword", defaultValue = "NULL", required = false) String keyword,
 			@RequestHeader(value = "pageNumber", defaultValue = ApplicationConstants.USER_SEARCH_DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestHeader(value = "pageSize", defaultValue = ApplicationConstants.USER_SEARCH_DEFAULT_PAGE_SIZE, required = false) Integer pageSize) {
+
+		BookResponseWithHeader bookResponseWithHeader = bookServices.getBookResponse(keyword, pageNumber, pageSize);
 		
-		return bookServices.getBookResponse(keyword, pageNumber, pageSize);
+		return new ResponseEntity<BookResponseWithHeader>(bookResponseWithHeader,HttpStatus.OK);
 		
 	}
 	
@@ -66,8 +76,11 @@ public class BookController {
 	 * Question no 4 - Search a book with mention bookId
 	 */
 	@GetMapping("/get-book/{id}")
-	public BookResponse findBookById(@PathVariable("id") Integer id) {
-		return bookServices.getBookById(id);
+	public ResponseEntity<BookResponse> findBookById(@PathVariable("id") Integer id) {
+
+		BookResponse bookResponse = bookServices.getBookById(id);
+
+		return new ResponseEntity<BookResponse>(bookResponse,HttpStatus.OK);
 	}
 	
 

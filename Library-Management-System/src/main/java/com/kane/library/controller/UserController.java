@@ -1,6 +1,8 @@
 package com.kane.library.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,11 @@ public class UserController {
 	
 	
 	@PostMapping("/createusers")
-	public UserResponse createUser(@RequestBody UserRequest userRequest) {
+	public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+
+		UserResponse userResponse = userServices.createUser(userRequest);
 		
-		return userServices.createUser(userRequest);
+		return new ResponseEntity<UserResponse>(userResponse, HttpStatus.CREATED);
 	}
 	
 
