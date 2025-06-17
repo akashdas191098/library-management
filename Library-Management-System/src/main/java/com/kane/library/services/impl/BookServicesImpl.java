@@ -41,7 +41,7 @@ public class BookServicesImpl implements BookServices {
 	public String createBook(BookRequest bookRequest) {
 		Books books = buildBooks(bookRequest);
 		Books savedBooks = bookRepositories.save(books);
-		return ApplicationConstants.BOOK_MSG+savedBooks.getId();
+		return ApplicationConstants.BOOK_MESSAGE+savedBooks.getId();
 	}
 
 
