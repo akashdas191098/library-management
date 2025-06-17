@@ -1,13 +1,15 @@
 package com.kane.library.book.test.service;
 
-import static org.junit.Assert.assertNotNull;
+//import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+//import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -26,7 +28,7 @@ import com.kane.library.services.impl.BookServicesImpl;
 
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class BookServiceTest {
 	
 	@InjectMocks
@@ -42,7 +44,7 @@ public class BookServiceTest {
 	public void testCreateBook() {
 		when(bookRepo.save(createBooks())).thenReturn(createBooks());
 		String result = bookService.createBook(createBookRequest());
-		org.junit.Assert.assertEquals(result, ApplicationConstants.BOOK_MSG+createBooks().getId());
+		assertEquals(result, ApplicationConstants.BOOK_MESSAGE+createBooks().getId());
 	}
 	
 	@Test

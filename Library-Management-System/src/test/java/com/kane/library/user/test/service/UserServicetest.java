@@ -1,14 +1,14 @@
 package com.kane.library.user.test.service;
 
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.kane.library.entity.User;
@@ -18,7 +18,7 @@ import com.kane.library.response.UserResponse;
 import com.kane.library.services.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class UserServicetest {
 	
 	@InjectMocks
