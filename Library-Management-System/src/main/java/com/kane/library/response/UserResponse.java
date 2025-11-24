@@ -9,5 +9,6 @@ public class UserResponse {
 	
 	private Integer id;
 	private String Name;
+	private String email;
 	
 }
